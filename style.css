@@ -316,7 +316,7 @@ button:active {
     /* Секция поздравлений с бойцами */
     .congratulations-container {
         flex-direction: column; /* Вертикальное расположение бойцов */
-		align-items: center;
+	align-items: center;
         gap: 15px;
     }
 
