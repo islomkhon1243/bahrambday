@@ -1,0 +1,393 @@
+/* Стили для брутальной атмосферы */
+body {
+    font-family: 'Bebas Neue', sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    overflow: auto;
+}
+
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/mma.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.7;
+    z-index: -1;
+    filter: grayscale(50%) brightness(0.5); /* Приглушаем фон */
+}
+
+/* Тёмный градиент поверх фонового изображения */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+    z-index: -1;
+}
+
+/* Главный заголовок */
+.main-title {
+    font-size: 4em;
+    color: #ff0000;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
+    animation: shake 1s infinite;
+    cursor: pointer;
+}
+
+.subtitle {
+    font-size: 1.5em;
+    color: #ccc;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Эффекты дрожания и вспышки */
+@keyframes shake {
+    0%, 100% { transform: translate(1px, 1px) rotate(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-1px, -1px) rotate(-1deg); }
+    20%, 40%, 60%, 80% { transform: translate(1px, -2px) rotate(1deg); }
+}
+
+/* Стили для галереи и эффекта поясов */
+#gallery {
+    margin-top: 30px;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.photo-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Контейнер для пояса */
+.belt {
+    position: relative;
+    display: inline-block;
+    padding: 5px;
+    background: linear-gradient(90deg, #d4af37, #f5f5f5, #d4af37);
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.belt:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px #ff0000;
+}
+
+/* Фото с эффектом */
+.gallery-item {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 5px solid #000;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* Метка на поясе */
+.belt-label {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #ffd700;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1em;
+    text-transform: uppercase;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Секция с поздравлениями */
+#mma-congratulations {
+    /*background-color: #1a1a1a;*/
+    padding: 50px 0;
+    text-align: center;
+    color: #ffd700;
+}
+
+#mma-congratulations h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #ff0000;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.congratulations-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.fighter {
+    background: #333;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+    width: 200px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.fighter:hover {
+    transform: scale(1.05);
+}
+
+.fighter-photo {
+    width: 100px; /* Задаем ширину */
+    height: 100px; /* Задаем высоту */
+    border-radius: 50%; /* Делаем изображение круглым */
+    border: 3px solid #ffd700; /* Золотая рамка */
+    margin-bottom: 10px;
+    object-fit: cover; /* Сохраняем пропорции изображения */
+}
+
+.fighter h3 {
+    font-size: 1.3em;
+    color: #ffffff;
+    margin: 10px 0;
+}
+
+.fighter p {
+    font-size: 1em;
+    color: #ccc;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Стили для фона с видео */
+#video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Видео на самом дне */
+}
+
+#background-video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Стили для анимации частиц */
+#particles-js {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Частицы над видео, но под контентом */
+}
+
+/* Стили для остального контента */
+#hero {
+    position: relative; /* Чтобы контент был выше частиц */
+    z-index: 2; /* Контент над частицами */
+    color: #fff;
+    text-align: center;
+    padding: 50px 20px;
+    /* Другие стили для hero */
+}
+
+/* Стили для контейнера игры */
+#game-container {
+    text-align: center;
+    position: relative;
+    margin: 20px;
+}
+
+#gloves-container {
+    position: relative;
+    height: 400px; /* Высота области для перчаток */
+    border: 2px dashed #ff0000; /* Границы области */
+    overflow: hidden;
+}
+
+/* Стили для боксерских перчаток */
+.glove {
+    position: absolute;
+    width: 80px; /* Ширина перчаток */
+    cursor: pointer; /* Указатель на указатель */
+    transition: transform 0.1s;
+}
+
+.glove:hover {
+    transform: scale(1.1); /* Увеличение при наведении */
+}
+
+#end-button {
+    margin-top: 10px
+}
+
+/* Стили для кнопок */
+button {
+    background-color: #ff0000; /* Красный фон */
+    color: #fff; /* Белый текст */
+    font-family: 'Bebas Neue', sans-serif; /* Шрифт */
+    font-size: 1.5em; /* Размер шрифта */
+    padding: 10px 20px; /* Отступы */
+    border: none; /* Без рамки */
+    border-radius: 5px; /* Скругленные углы */
+    cursor: pointer; /* Указатель на указатель */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Плавные переходы */
+    margin: 10px; /* Отступ между кнопками */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Тень */
+}
+
+button:hover {
+    background-color: #d40000; /* Темнее при наведении */
+    transform: scale(1.05); /* Увеличение при наведении */
+}
+
+button:active {
+    transform: scale(0.95); /* Уменьшение при нажатии */
+}
+
+.crossword-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.word {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.word-title {
+    font-size: 3em; /* Большой размер букв */
+    font-weight: bold;
+    color: #ff0000; /* Красный цвет для выделения */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Тень для объема */
+}
+
+.description {
+    font-size: 1.2em; /* Размер текста для описания */
+    color: #fff; /* Цвет описания */
+    max-width: 400px; /* Ограничение ширины */
+    line-height: 1.4; /* Интервал между строками */
+}
+
+/* Стили для мобильных устройств */
+@media only screen and (max-width: 768px) {
+    /* Основные настройки для текста и заголовков */
+    .main-title {
+        font-size: 2.5em;
+    }
+
+    .subtitle {
+        font-size: 1.2em;
+    }
+
+    /* Галерея фото */
+    .photo-grid {
+        flex-direction: column; /* Выстраивание по вертикали на узких экранах */
+        gap: 10px;
+    }
+
+    .gallery-item {
+        width: 150px; /* Уменьшение размера фото */
+        height: 150px;
+    }
+
+    /* Секция поздравлений с бойцами */
+    .congratulations-container {
+        flex-direction: column; /* Вертикальное расположение бойцов */
+		align-items: center;
+        gap: 15px;
+    }
+
+    .fighter {
+        width: 100%; /* Растягиваем контейнер бойца на всю ширину */
+        max-width: 300px;
+    }
+
+    .fighter-photo {
+        width: 80px; /* Уменьшаем изображение бойца */
+        height: 80px;
+    }
+
+    /* Контейнер для игры с перчатками */
+    #game-container {
+        margin: 10px;
+    }
+
+    #gloves-container {
+        height: 300px; /* Уменьшаем высоту области для игры на мобильных */
+    }
+
+    /* Кнопки "Начать игру" и "Закончить игру" */
+    #start-button, #end-button {
+        font-size: 0.8em;
+        padding: 10px 15px;
+        margin-top: 5px;
+    }
+}
+
+/* Стили для очень маленьких экранов, например, телефонов с шириной до 480px */
+@media only screen and (max-width: 480px) {
+    .main-title {
+        font-size: 2em;
+    }
+
+    .subtitle {
+        font-size: 1em;
+    }
+
+    /* Галерея фото */
+    .gallery-item {
+        width: 120px;
+        height: 120px;
+    }
+
+    /* Секция поздравлений */
+    .fighter-photo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .fighter {
+        padding: 10px; /* Уменьшаем отступы */
+    }
+
+    /* Уменьшение размера текста для поздравлений */
+    .fighter h3 {
+        font-size: 1.1em;
+    }
+
+    .fighter p {
+        font-size: 0.9em;
+    }
+
+    /* Секция игры */
+    #gloves-container {
+        height: 250px;
+    }
+
+    .glove {
+        width: 60px; /* Уменьшаем размер перчаток */
+    }
+}
+

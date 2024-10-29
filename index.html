@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Брутальное Поздравление с Днём Рождения!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+	<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <!-- Фон с тёмным стилем боксерского ринга -->
+    <div id="video-background">
+        <video autoplay muted loop id="background-video">
+            <source src="videos/mma.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+	
+	<!-- Элемент для анимации частиц -->
+    <div id="particles-js"></div>
+
+    <!-- Заголовок с эффектом удара -->
+    <header id="hero">
+        <h1 class="main-title">С Днём Рождения, Чемпион!</h1>
+        <p class="subtitle">Ну чтож, 20 с чем то летием старик!</p>
+    </header>
+
+    <!-- Галерея фото в стиле боксерского ринга -->
+    <section id="gallery">
+		<h2>Чемпионские моменты</h2>
+		<div class="photo-grid">
+			<div class="belt">
+				<video src="videos/video1.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Типа качок</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video2.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Бляяяя, надо подстричься налысо</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video3.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">С маринадом</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video4.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Капучино 0,5</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video5.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Ёбаная аллергия</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video6.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Малолетний</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video7.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Не на своей свадьбе</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video8.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Я бы её...</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video9.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Без комментариев</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video10.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Голубь</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video11.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Не топиии</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video12.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Роблокс</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video13.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Быстрее всех)</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video14.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Луна</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video15.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Хватит щеку снимать!</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video16.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">7-ой гномик</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video17.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Яйца не отморозь, малец</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video18.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Выспался?!</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video19.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Пепси 0,5</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video20.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Жакилометр</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video21.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Нефор v2.0</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video22.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Разрыв очка</div>
+			</div>
+			<div class="belt">
+				<video src="videos/video23.mp4" class="gallery-item" autoplay loop muted></video> <!-- Чемпион -->
+				<div class="belt-label">Палим шерстяного</div>
+			</div>
+		</div>
+	</section>
+	
+	<section id="mma-congratulations">
+    <h2>Поздравления от Легенд ММА</h2>
+    <div class="congratulations-container">
+        <div class="fighter">
+            <img src="images/fighter1.jpg" alt="Боец 1" class="fighter-photo">
+            <h3>Хабиб Нурмагомедов</h3>
+            <p>«Будь непобедим, как в клетке, так и в жизни. Ты – настоящий чемпион!»</p>
+        </div>
+        <div class="fighter">
+            <img src="images/fighter2.jpg" alt="Боец 2" class="fighter-photo">
+            <h3>Конор МакГрегор</h3>
+            <p>«Никогда не сдавайся и верь в свою силу. Сегодня ты король ринга!»</p>
+        </div>
+        <div class="fighter">
+            <img src="images/fighter3.jpg" alt="Боец 3" class="fighter-photo">
+            <h3>Джордж Сент-Пьер</h3>
+            <p>«С Днём Рождения! Сила воли делает тебя непобедимым.»</p>
+        </div>
+        <div class="fighter">
+            <img src="images/fighter4.jpg" alt="Боец 4" class="fighter-photo">
+            <h3>Андерсон Сильва</h3>
+            <p>«С каждым днём становись сильнее и мудрее. Ты наш боец!»</p>
+        </div>
+        <div class="fighter">
+            <img src="images/fighter5.jpg" alt="Боец 5" class="fighter-photo">
+            <h3>Даниэль Кормье</h3>
+            <p>«Сегодня твой день! Покажи миру, что такое настоящий чемпион!»</p>
+        </div>
+    </div>
+</section>
+
+	<div class="crossword-container">
+		<div class="word">
+			<div class="word-title">Б</div>
+			<div class="description">Боец — Кто всегда идет к своей цели, несмотря ни на что.</div>
+		</div>
+		<div class="word">
+			<div class="word-title">А</div>
+			<div class="description">Атлет — Человек, который держит себя в отличной физической форме.</div>
+		</div>
+		<div class="word">
+			<div class="word-title">Х</div>
+			<div class="description">Харизма — Качество, которое притягивает людей к Бахраму.</div>
+		</div>
+		<div class="word">
+			<div class="word-title">Р</div>
+			<div class="description">Рекорд — Лучший результат, который всегда можно побить.</div>
+		</div>
+		<div class="word">
+			<div class="word-title">А</div>
+			<div class="description">Амбиции — То, что движет Бахрама к новым вершинам.</div>
+		</div>
+		<div class="word">
+			<div class="word-title">М</div>
+			<div class="description">Мотивация — Что всегда помогает достигать успеха.</div>
+		</div>
+	</div>
+
+	<div id="game-container">
+		<h2>Попади в боксерскую перчатку!</h2>
+		<p>Очки: <span id="score">0</span></p>
+		<div id="gloves-container"></div>
+		<button id="start-button">Начать игру</button>
+		<button id="end-button" style="display: none;">Закончить игру</button> <!-- Кнопка для завершения игры -->
+	</div>
+
+    <!-- Фоновая музыка и звуковые эффекты -->
+    <audio id="background-music" src="music/boxing.mp3" loop autoplay></audio>
+	<!-- Кнопка для включения музыки -->
+    <button id="play-music" onclick="playMusic()">Включить музыку</button>
+    <audio id="punch-sound">
+        <source src="sounds/punch.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Скрипты для эффектов -->
+    <script src="script.js"></script>
+	<script src="particles-config.js"></script>
+	<script src="game.js"></script>
+</body>
+</html>
