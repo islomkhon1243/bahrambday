@@ -310,6 +310,7 @@ button:active {
     .gallery-item {
         width: 150px; /* Уменьшение размера фото */
         height: 150px;
+	margin-bottom: 20px;
     }
 
     /* Секция поздравлений с бойцами */
