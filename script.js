@@ -31,19 +31,43 @@ document.querySelectorAll('.belt').forEach(belt => {
     });
 });
 
-const music = document.getElementById("background-music");
-        const playButton = document.getElementById("play-music");
+const button = document.getElementById('music-button');
+        const audioPlayer = document.getElementById('audio-player');
 
-        // Функция для воспроизведения музыки
-        function playMusic() {
-            music.play().then(() => {
-                playButton.style.display = 'none'; // Скрыть кнопку после успешного воспроизведения
-            }).catch(error => {
-                console.error("Не удалось воспроизвести музыку:", error);
-                alert("Музыка не может быть воспроизведена автоматически. Попробуйте снова.");
-            });
+        // Массив аудиофайлов
+        const musicTracks = ['music/music1.mp3', 'music/music2.mp3', 'music/music3.mp3', 'music/music4.mp3'];
+        let currentTrack = 0; // Индекс текущего трека
+
+        // Массив текстов для кнопки
+        const buttonLabels = [
+            "Ой, не то, го другую",
+            "Опять, не то, бляяя",
+			"Прикольно, но мимо",
+            "Самое то"
+        ];
+
+        // Функция для переключения музыки
+        function changeMusic() {
+            // Если не достигли последнего трека
+            if (currentTrack < musicTracks.length) {
+                // Устанавливаем текущий трек
+                audioPlayer.src = musicTracks[currentTrack];
+                audioPlayer.play();
+
+                // Обновляем текст кнопки
+                button.textContent = buttonLabels[currentTrack] || "Самое то";
+
+                // Переходим к следующему треку
+                currentTrack++;
+            } else {
+                // Останавливаем функционал кнопки, делая её неактивной
+                button.textContent = "Самое то";
+                button.disabled = true;
+                button.style.cursor = 'default';
+                button.style.backgroundColor = '#666';
+            }
         }
 
-// Настройка музыки
-const backgroundMusic = document.getElementById("background-music");
-backgroundMusic.volume = 0.2; // для громкости пониженной на фоне
+        // Событие нажатия на кнопку
+        button.addEventListener('click', changeMusic);
+
