@@ -24,7 +24,7 @@
     <!-- Заголовок с эффектом удара -->
     <header id="hero">
         <h1 class="main-title">С Днём Рождения, Чемпион!</h1>
-        <p class="subtitle">Ну чтож, с 20 с чем то летием старик!</p>
+        <p class="subtitle">Ну чтож, 20 с чем то летием старик!</p>
     </header>
 
     <!-- Галерея фото в стиле боксерского ринга -->
@@ -192,10 +192,9 @@
 		<button id="end-button" style="display: none;">Закончить игру</button> <!-- Кнопка для завершения игры -->
 	</div>
 
-    <!-- Фоновая музыка и звуковые эффекты -->
-    <audio id="background-music" src="music/boxing.mp3" loop autoplay></audio>
 	<!-- Кнопка для включения музыки -->
-    <button id="play-music" onclick="playMusic()">Включить музыку</button>
+    <button id="music-button" class="music-button">Включить музыку</button>
+	<audio id="audio-player" src="music/music1.mp3"></audio>
     <audio id="punch-sound">
         <source src="sounds/punch.mp3" type="audio/mpeg">
     </audio>
