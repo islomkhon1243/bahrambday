@@ -1,0 +1,240 @@
+	<!DOCTYPE html>
+	<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Страница с защитой паролем</title>
+		<style>
+			
+			.login-container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding: 20px;
+				border-radius: 8px;
+				background-color: #333;
+			}
+			.login-container input {
+				padding: 10px;
+				margin-top: 10px;
+				border: none;
+				border-radius: 5px;
+				font-size: 1em;
+			}
+			.login-container button {
+				margin-top: 10px;
+				padding: 10px 20px;
+				font-size: 1em;
+				color: #fff;
+				background-color: #ff0000;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			.content {
+				display: none;
+				padding: 20px;
+				background-color: #1a1a1a;
+				color: #fff;
+				text-align: center;
+				animation: fadeIn 1.5s ease-out;
+			}
+			.error {
+				color: #ff0000;
+				margin-top: 10px;
+			}
+			body {
+				background-color: #1a1a1a;
+				color: #fff;
+				font-family: 'Comic Sans MS', sans-serif;
+				text-align: center;
+				padding: 20px;
+			}
+
+			.anime-girls {
+				display: flex;
+				justify-content: space-around;
+				flex-wrap: wrap;
+				gap: 20px;
+				margin-top: 30px;
+			}
+
+			.girl {
+				background: #333;
+				padding: 20px;
+				border-radius: 15px;
+				width: 250px;
+				box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+				text-align: center;
+				transition: transform 0.3s ease;
+			}
+
+			.girl:hover {
+				transform: scale(1.05);
+				box-shadow: 0px 0px 15px #ff69b4;
+			}
+
+			/* Эффект увеличения на изображениях при наведении */
+			.girl img {
+				width: 100%;
+				border-radius: 10px;
+				transition: transform 0.3s ease; /* Плавное увеличение */
+			}
+
+			.girl img:hover {
+				transform: scale(1.1); /* Увеличение до 110% */
+			}
+
+			.girl h3 {
+				margin-top: 10px;
+				color: #ff69b4;
+				font-size: 1.5em;
+			}
+
+			.girl p {
+				font-size: 1.2em;
+				color: #ffd700;
+				font-style: italic;
+			}
+			/* Анимация появления */
+			@keyframes fadeIn {
+				from { opacity: 0; }
+				to { opacity: 1; }
+			}
+			.falling-girls {
+				position: fixed; /* Фиксированное положение для эффекта падения */
+				top: -100px; /* Начальная позиция выше экрана */
+				width: 100%; /* Ширина на весь экран */
+				pointer-events: none; /* Чтобы элементы не мешали кликам на другие элементы */
+			}
+
+			.falling-image {
+				position: absolute;
+				width: 100px; /* Ширина изображения */
+				animation: fall 5s linear infinite; /* Анимация падения */
+				opacity: 0; /* Начальная прозрачность */
+			}
+
+			@keyframes fall {
+				0% {
+					top: -100px; /* Начальная позиция */
+					opacity: 0; /* Невидимо в начале */
+					transform: rotate(0deg); /* Начальный угол вращения */
+				}
+				50% {
+					opacity: 1; /* Появляется на середине анимации */
+					transform: rotate(180deg); /* Поворачивается на 180 градусов */
+				}
+				100% {
+					top: 100vh; /* Падает за экран */
+					opacity: 0; /* Снова невидимо */
+					transform: rotate(360deg); /* Поворачивается на 360 градусов */
+				}
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="login-container" id="login-container">
+			<h2>Введите пароль для доступа</h2>
+			<h3>Подсказка: любимое число лучшего друга)</h3>
+			<input type="password" id="password-input" placeholder="Введите пароль">
+			<button onclick="checkPassword()">Войти</button>
+			<div id="error-message" class="error"></div>
+		</div>
+
+		<div class="content" id="protected-content">
+			<h1>С Днём Рождения, <span style="color: #ff69b4;">Бахрам</span>!</h1>
+			<p>Специальные поздравления от самых горячих аниме-тянок и красоток только для тебя!</p>
+
+			<div class="anime-girls">
+				<div class="girl">
+					<img src="images/anime1.jpg" alt="Аниме-тян">
+					<h3>Цундере-тян</h3>
+					<p>Ты, конечно, не заслужил, но... с Днём Рождения, глупышка.</p>
+				</div>
+				
+				<div class="girl">
+					<img src="images/anime2.jpg" alt="Аниме-тян">
+					<h3>Кавая-тян</h3>
+					<p>Поздравляю, мой герой! Желаю, чтобы твои мечты исполнялись, как и мои сны о тебе...</p>
+				</div>
+
+				<div class="girl">
+					<img src="images/model1.jpg" alt="Красивая девушка">
+					<h3>Легкая красотка</h3>
+					<p>Бахрам, с твоим обаянием и харизмой мир у твоих ног, так что не стесняйся и покоряй!</p>
+				</div>
+				
+				<div class="girl">
+					<img src="images/model2.jpg" alt="Красивая девушка">
+					<h3>Брутальная подруга</h3>
+					<p>С Днём Рождения, тигр! Продолжай покорять женские сердца так же легко, как и свои цели!</p>
+				</div>
+
+				<div class="girl">
+					<img src="images/anime3.jpg" alt="Аниме-тян">
+					<h3>Секси-сэнсей</h3>
+					<p>Если учиться, то у лучших! А если поздравлять – то только тебя, Бахрам!</p>
+				</div>
+			</div>
+			<div class="falling-girls">
+			<img src="images/bust1.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust2.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust3.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust1.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust2.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust3.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust1.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust2.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust3.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust1.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust2.png" alt="Падающая девушка" class="falling-image">
+			<img src="images/bust3.png" alt="Падающая девушка" class="falling-image">
+			<!-- Добавьте столько изображений, сколько вам нужно -->
+		</div>
+			<h1><span style="color: #ff69b4;">P.s. НЕ ДРОЧИТЬ!</span>!</h1>
+		</div>
+		
+
+		<script>
+			// Установите пароль
+			const correctPassword = "69";
+
+			// Функция для проверки пароля
+			function checkPassword() {
+				const passwordInput = document.getElementById("password-input").value;
+				const errorMessage = document.getElementById("error-message");
+				const loginContainer = document.getElementById("login-container");
+				const protectedContent = document.getElementById("protected-content");
+
+				if (passwordInput === correctPassword) {
+					// Если пароль верен, скрываем контейнер входа и показываем защищенный контент
+					loginContainer.style.display = "none";
+					protectedContent.style.display = "block";
+				} else {
+					// Если пароль неверен, показываем сообщение об ошибке
+					errorMessage.textContent = "Неверный пароль. Попробуйте снова.";
+				}
+			}
+			
+			const fallingImages = document.querySelectorAll('.falling-image');
+
+			fallingImages.forEach((image) => {
+				const randomLeft = Math.random() * 100; // Случайная позиция от 0 до 100%
+				const randomDelay = Math.random() * 2; // Случайная задержка от 0 до 2 секунд
+				const randomDuration = Math.random() * 3 + 3; // Случайная продолжительность от 3 до 6 секунд
+
+				// Применяем стили
+				image.style.left = `${randomLeft}%`;
+				image.style.animationDelay = `${randomDelay}s`;
+				image.style.animationDuration = `${randomDuration}s`;
+
+				// Устанавливаем анимацию
+				image.style.animationName = 'fall';
+			});
+		</script>
+
+	</body>
+	</html>
+
