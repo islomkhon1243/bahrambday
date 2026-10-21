@@ -1,7 +1,7 @@
 (() => {
   const slot = document.querySelector('.gallery-cover-slot');
   const input = document.getElementById('cover-upload');
-  if (!slot || !input) return;
+  if (!slot || !input || slot.querySelector('img[src^="assets/"]')) return;
   const status = slot.querySelector('.cover-upload-status');
   const key = 'afterglow-cover-v1';
   function show(src) {

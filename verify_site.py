@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import unquote
 from bs4 import BeautifulSoup
 import re
 root=Path('dist');bad=[]
@@ -9,7 +10,7 @@ for p in root.glob('*.html'):
   ref=el.get('src') or el.get('href')
   if not ref or ref.startswith(('https:','http:','data:')):continue
   file,_,anchor=ref.partition('#')
-  if file and not (root/file).is_file():bad.append((p.name,ref))
+  if file and not (root/unquote(file)).is_file():bad.append((p.name,ref))
   if not file and anchor and anchor not in ids:bad.append((p.name,ref))
  print(p.name,'sections',len(s.select('section')),'images',len(s.select('img')))
 for p in root.glob('*.css'):
