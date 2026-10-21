@@ -1,0 +1,14 @@
+from pathlib import Path
+import urllib.request,re
+root=Path('dist'); fonts=root/'assets/fonts'; fonts.mkdir(exist_ok=True)
+url='https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap'
+req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36'})
+css=urllib.request.urlopen(req,timeout=25).read().decode()
+urls=list(dict.fromkeys(re.findall(r'url\((https://[^)]+)\)',css)))
+for i,url in enumerate(urls):
+ ext='woff2' if '.woff2' in url else 'ttf'
+ target=f'font-{i:02}.{ext}'
+ (fonts/target).write_bytes(urllib.request.urlopen(url,timeout=25).read())
+ css=css.replace(url,'assets/fonts/'+target)
+(root/'fonts.css').write_text(css,encoding='utf-8')
+print('Local fonts:',len(urls))
