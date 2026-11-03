@@ -1,39 +1,120 @@
 (() => {
   'use strict';
-  const initial=(window.BAHRAM_GALLERY||[]).slice(0,10).map((frame,i)=>({...frame,id:i,alt:frame.alt||`Фотография ${i+1}: ${frame.title}`}));
-  const frames=initial.map(frame=>({...frame}));
-  const grid=document.getElementById('frames-grid'),viewer=document.getElementById('gallery-viewer'),layers=document.getElementById('viewer-layers'),thumbs=document.getElementById('viewer-thumbs'),notice=document.getElementById('gallery-notice');
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  let index=0,interval,autoplay=false,previousFocus,activeLayer=0,touchStart=null,cleanupTimer,updateId=0;
-  const blobURLs=new Set();
-  const pad=n=>String(n).padStart(2,'0');
-  function placeholder(i,small=false){const el=document.createElement('div');el.className='frame-placeholder'+(small?' small':'');el.style.setProperty('--hue',String(315+i*5));el.innerHTML='<span class="placeholder-orbit"></span><span class="placeholder-number"></span><span class="placeholder-label"></span>';el.querySelector('.placeholder-number').textContent=pad(i+1);el.querySelector('.placeholder-label').textContent=small?'': 'МЕСТО ДЛЯ ТВОЕГО КАДРА';return el;}
-  function visual(frame,small=false){if(!frame.src)return placeholder(frame.id,small);const image=new Image();image.src=frame.src;image.alt=small?'':frame.alt;image.loading=small?'eager':'lazy';image.decoding='async';image.addEventListener('error',()=>{image.replaceWith(placeholder(frame.id,small));if(!small)notice.textContent='Один из файлов не открылся. Для него показана заглушка.';},{once:true});return image;}
-  function updateCount(){const count=frames.filter(f=>f.src).length;document.getElementById('loaded-count').textContent=count?`${count} ИЗ ${frames.length} КАДРОВ ДОБАВЛЕНО`:`${frames.length} КАДРОВ · ШАБЛОН`;}
-  function renderGrid(){grid.replaceChildren();thumbs.replaceChildren();frames.forEach((frame,i)=>{const button=document.createElement('button');button.className='frame-card';button.style.setProperty('--order',String(i));button.setAttribute('aria-label',`Открыть кадр ${i+1}: ${frame.title}`);const art=document.createElement('div');art.className='frame-art';art.append(visual(frame));const count=document.createElement('span');count.className='frame-index';count.textContent=pad(i+1);art.append(count);const expand=document.createElement('span');expand.className='frame-expand';expand.textContent='↗';art.append(expand);const caption=document.createElement('div');caption.className='frame-card-caption';const title=document.createElement('h3');title.textContent=frame.title;const text=document.createElement('p');text.textContent=frame.caption;caption.append(title,text);button.append(art,caption);button.addEventListener('click',()=>open(i));grid.append(button);const thumb=document.createElement('button');thumb.setAttribute('aria-label',`Кадр ${i+1}: ${frame.title}`);thumb.append(visual(frame,true));const number=document.createElement('span');number.textContent=pad(i+1);thumb.append(number);thumb.addEventListener('click',()=>show(i));thumbs.append(thumb);});updateCount();const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('shown');observer.unobserve(entry.target);}});},{threshold:.05});grid.querySelectorAll('.frame-card').forEach(card=>observer.observe(card));}
-  function stopAutoplay(){autoplay=false;clearInterval(interval);document.getElementById('viewer-autoplay').textContent='▶';document.getElementById('viewer-autoplay').setAttribute('aria-pressed','false');document.getElementById('viewer-autoplay').setAttribute('aria-label','Включить слайд-шоу');document.getElementById('viewer-progress-bar').classList.remove('running');}
-  function restartTimer(){clearInterval(interval);const progress=document.getElementById('viewer-progress-bar');progress.classList.remove('running');if(autoplay){requestAnimationFrame(()=>{if(autoplay)progress.classList.add('running');});interval=setInterval(()=>show(index+1),5500);}}
-  function show(next){index=(next+frames.length)%frames.length;const frame=frames[index],request=++updateId;document.getElementById('viewer-counter').textContent=`${pad(index+1)} / ${pad(frames.length)}`;document.getElementById('viewer-label').textContent=`КАДР ${pad(index+1)}`;document.getElementById('viewer-title').textContent=frame.title;document.getElementById('viewer-description').textContent=frame.caption;[...thumbs.children].forEach((thumb,i)=>{thumb.classList.toggle('selected',i===index);thumb.setAttribute('aria-pressed',String(i===index));});clearTimeout(cleanupTimer);const layer=document.createElement('div');layer.className='viewer-image-layer';layer.dataset.layer=String(++activeLayer);const artwork=visual(frame);if(artwork.tagName==='IMG')artwork.loading='eager';layer.append(artwork);layers.append(layer);const reveal=()=>requestAnimationFrame(()=>{if(request!==updateId){layer.remove();return;}layer.classList.add('active');[...layers.children].forEach(other=>{if(other!==layer){other.classList.remove('active');other.setAttribute('aria-hidden','true');}});cleanupTimer=setTimeout(()=>{[...layers.children].forEach(other=>{if(other!==layer)other.remove();});},reduced.matches?0:650);});if(artwork.tagName==='IMG'&&artwork.decode)artwork.decode().catch(()=>{}).then(reveal);else reveal();restartTimer();}
-  function open(i){previousFocus=document.activeElement;show(i);if(!viewer.open)viewer.showModal();document.documentElement.classList.add('gallery-viewer-open');document.getElementById('viewer-close').focus({preventScroll:true});syncMusic();}
-  async function close(){stopAutoplay();if(document.fullscreenElement&&viewer.contains(document.fullscreenElement)){try{await document.exitFullscreen();}catch{}}viewer.close();}
-  viewer.addEventListener('close',()=>{stopAutoplay();document.documentElement.classList.remove('gallery-viewer-open');previousFocus?.focus({preventScroll:true});});
-  viewer.addEventListener('cancel',e=>{e.preventDefault();close();});
-  document.getElementById('viewer-close').addEventListener('click',close);document.getElementById('viewer-prev').addEventListener('click',()=>show(index-1));document.getElementById('viewer-next').addEventListener('click',()=>show(index+1));
-  document.getElementById('viewer-autoplay').addEventListener('click',()=>{if(autoplay){stopAutoplay();return;}autoplay=true;document.getElementById('viewer-autoplay').textContent='Ⅱ';document.getElementById('viewer-autoplay').setAttribute('aria-pressed','true');document.getElementById('viewer-autoplay').setAttribute('aria-label','Остановить слайд-шоу');restartTimer();});
-  document.getElementById('viewer-fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement&&viewer.contains(document.fullscreenElement))await document.exitFullscreen();else if(viewer.querySelector('.viewer-shell').requestFullscreen)await viewer.querySelector('.viewer-shell').requestFullscreen();else document.getElementById('viewer-fullscreen').hidden=true;}catch{document.getElementById('viewer-fullscreen').hidden=true;}});
-  if(!viewer.querySelector('.viewer-shell').requestFullscreen)document.getElementById('viewer-fullscreen').hidden=true;
-  viewer.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();show(index+1);}else if(e.key==='ArrowLeft'){e.preventDefault();show(index-1);}else if(e.key===' '&&e.target.tagName!=='BUTTON'){e.preventDefault();document.getElementById('viewer-autoplay').click();}});
-  const canvas=document.getElementById('viewer-canvas');canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')touchStart={x:e.clientX,y:e.clientY};});canvas.addEventListener('pointerup',e=>{if(!touchStart)return;const dx=e.clientX-touchStart.x,dy=e.clientY-touchStart.y;touchStart=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4)show(index+(dx<0?1:-1));});canvas.addEventListener('pointercancel',()=>touchStart=null);
-  document.getElementById('open-slideshow').addEventListener('click',()=>{open(0);if(!reduced.matches)document.getElementById('viewer-autoplay').click();});
-  function syncMusic(){const playing=Boolean(window.BahramSound?.playing),button=document.getElementById('viewer-music');button.setAttribute('aria-pressed',String(playing));button.setAttribute('aria-label',playing?'Выключить музыку':'Включить музыку');}
-  document.getElementById('viewer-music').addEventListener('click',async()=>{if(window.BahramSound?.playing)window.BahramSound.pause();else await window.BahramSound?.play();syncMusic();});
-  document.addEventListener('bahram:musicstate',syncMusic);
-  function database(){return new Promise((resolve,reject)=>{if(!window.indexedDB){reject(Error('No local storage'));return;}const request=indexedDB.open('bahram-local-gallery',1);request.onupgradeneeded=()=>request.result.createObjectStore('images');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
-  function replaceLocal(files){blobURLs.forEach(url=>URL.revokeObjectURL(url));blobURLs.clear();frames.forEach((frame,i)=>{Object.assign(frame,initial[i]);if(files[i]){const url=URL.createObjectURL(files[i]);blobURLs.add(url);frame.src=url;}});renderGrid();}
-  async function persist(files){const db=await database();try{await new Promise((resolve,reject)=>{const tx=db.transaction('images','readwrite');tx.objectStore('images').put(files,'selected');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}finally{db.close();}}
-  document.getElementById('gallery-upload').addEventListener('change',async e=>{const supplied=[...e.target.files];if(!supplied.length)return;const files=supplied.filter(file=>file.type.startsWith('image/')&&file.size<=20*1024*1024).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true})).slice(0,10);if(!files.length){notice.textContent='Выбери изображения JPG, PNG, WebP, AVIF или GIF размером до 20 МБ.';return;}replaceLocal(files);notice.textContent=`Добавлено ${files.length} из 10 кадров. Фотографии доступны только на этом устройстве.`;if(supplied.length!==files.length)notice.textContent+=' Лишние или слишком большие файлы пропущены.';try{await persist(files);}catch{notice.textContent+=' Браузер не смог сохранить файлы: после закрытия они могут исчезнуть.';}e.target.value='';});
-  document.getElementById('gallery-reset').addEventListener('click',async()=>{replaceLocal([]);notice.textContent='Локальные фотографии убраны. Исходные файлы на устройстве не изменены.';try{await persist([]);}catch{notice.textContent+=' Сохранённые данные браузера очистить не удалось.';}});
-  async function restore(){if(initial.some(frame=>frame.src))return;try{const db=await database();const files=await new Promise((resolve,reject)=>{const request=db.transaction('images').objectStore('images').get('selected');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});db.close();if(files?.length)replaceLocal(files);}catch{}}
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAutoplay();});addEventListener('pagehide',()=>{stopAutoplay();clearTimeout(cleanupTimer);});
-  renderGrid();restore();
+  const $ = id => document.getElementById(id);
+  const entry = $('entry'), form = $('entry-form'), answer = $('entry-answer');
+  const archive = $('archive'), grid = $('photo-grid'), viewer = $('photo-viewer');
+  const data = (window.BAHRAM_GALLERY || []).map((frame, i) => ({...frame, id:i,
+    width: Number(frame.width) > 0 ? Number(frame.width) : 3,
+    height: Number(frame.height) > 0 ? Number(frame.height) : 4,
+    title: frame.title || `Кадр ${i + 1}`, alt: frame.alt || `Фотография ${i + 1}`}));
+  const pad = value => String(value).padStart(2, '0');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let unlocked = false, built = false, current = 0, renderRequest = 0, opener;
+  let timer, autoplay = false, touchStart = null, unlocking = false;
+  function placeholder(frame) {
+    const el = document.createElement('div');
+    el.className = 'empty-photo';
+    el.style.setProperty('--ratio', `${frame.width}/${frame.height}`);
+    el.style.setProperty('--hue', String(335 + frame.id % 6 * 7));
+    const number = document.createElement('span'); number.className = 'empty-number'; number.textContent = pad(frame.id + 1);
+    const label = document.createElement('span'); label.className = 'empty-label'; label.textContent = 'МЕСТО ДЛЯ МОМЕНТА';
+    el.append(number, label); return el;
+  }
+  function artwork(frame, eager = false) {
+    if (!frame.src) return placeholder(frame);
+    const image = new Image(); image.alt = frame.alt; image.decoding = 'async';
+    image.loading = eager ? 'eager' : 'lazy'; image.width = frame.width; image.height = frame.height;
+    image.addEventListener('load', () => {image.width=image.naturalWidth;image.height=image.naturalHeight;}, {once:true});
+    image.addEventListener('error', () => image.replaceWith(placeholder(frame)), {once:true});
+    image.src = frame.src; return image;
+  }
+  function build() {
+    if (built) return; built = true;
+    const heroConfig = window.BAHRAM_GALLERY_HERO;
+    const heroMedia = $('hero-media');
+    if (heroConfig?.src && heroMedia) {
+      const image = new Image();
+      image.alt = heroConfig.alt || '';
+      image.decoding = 'async';
+      image.addEventListener('load', () => {
+        heroMedia.replaceChildren(image);
+        heroMedia.classList.add('has-media');
+      }, {once:true});
+      image.src = heroConfig.src;
+    }
+    $('frame-count').textContent = data.length;
+    data.forEach((frame, i) => {
+      const card = document.createElement('button'); card.className = 'photo-card';
+      card.setAttribute('aria-label', `Открыть кадр ${i+1}: ${frame.title}`);
+      const art = document.createElement('div'); art.className = 'photo-art'; art.append(artwork(frame));
+      const meta = document.createElement('div'); meta.className = 'photo-meta';
+      const title = document.createElement('span'); title.textContent=frame.title;
+      const number = document.createElement('span'); number.textContent=pad(i+1);
+      meta.append(title, number); card.append(art, meta); card.addEventListener('click',()=>open(i,card)); grid.append(card);
+      const thumb=document.createElement('button'); thumb.setAttribute('aria-label',`Кадр ${i+1}`);
+      thumb.append(artwork(frame)); thumb.addEventListener('click',()=>show(i)); $('filmstrip').append(thumb);
+    });
+  }
+  function reveal() {
+    unlocked=true; unlocking=false; entry.hidden=true; archive.hidden=false;
+    document.body.classList.remove('is-locked'); build();
+    window.scrollTo(0,0); $('archive-title').focus({preventScroll:true});
+  }
+  form.addEventListener('submit', event => {
+    event.preventDefault(); if(unlocking)return;
+    if(answer.value.trim()!=='69') {
+      $('entry-error').textContent='Не-а. Лучший друг сейчас бы закатил глаза. Попробуй ещё.';
+      answer.setAttribute('aria-invalid','true'); entry.classList.remove('wrong');
+      void entry.offsetWidth; entry.classList.add('wrong'); answer.focus(); answer.select(); return;
+    }
+    unlocking=true; answer.removeAttribute('aria-invalid'); $('entry-error').textContent='Свой. Добро пожаловать.';
+    window.BahramSound?.play();
+    if(reduced)reveal();else{entry.classList.add('leaving');setTimeout(reveal,480);}
+  });
+  answer.addEventListener('input',()=>{answer.removeAttribute('aria-invalid');$('entry-error').textContent='';entry.classList.remove('wrong');});
+  $('lock-gallery').addEventListener('click',()=>{
+    unlocked=false;archive.hidden=true;entry.hidden=false;entry.classList.remove('leaving');
+    document.body.classList.add('is-locked');answer.value='';$('entry-error').textContent='';
+    window.BahramSound?.pause(); window.scrollTo(0,0);answer.focus();
+  });
+  document.querySelectorAll('[data-density]').forEach(button=>button.addEventListener('click',()=>{
+    grid.classList.toggle('compact',button.dataset.density==='compact');
+    document.querySelectorAll('[data-density]').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+  }));
+  function restartTimer() {
+    clearTimeout(timer); const bar=$('slide-progress');bar.classList.remove('running');
+    if(!autoplay||!viewer.open||document.hidden)return;
+    void bar.offsetWidth;bar.classList.add('running');timer=setTimeout(()=>show(current+1),6000);
+  }
+  function stop() {autoplay=false;clearTimeout(timer);$('slide-progress').classList.remove('running');$('viewer-play').textContent='▶';$('viewer-play').setAttribute('aria-pressed','false');$('viewer-play').setAttribute('aria-label','Включить слайд-шоу');}
+  async function show(index) {
+    if(!data.length)return;
+    current=(index+data.length)%data.length;
+    const frame=data[current],request=++renderRequest;
+    $('viewer-count').textContent=`${pad(current+1)} / ${pad(data.length)}`;
+    $('viewer-label').textContent=`КАДР ${pad(current+1)} / ЛИЧНАЯ КОЛЛЕКЦИЯ`;
+    $('viewer-title').textContent=frame.title;$('viewer-description').textContent=frame.caption||'';
+    [...$('filmstrip').children].forEach((thumb,i)=>{thumb.classList.toggle('selected',i===current);thumb.setAttribute('aria-pressed',String(i===current));});
+    const selected=$('filmstrip').children[current];
+    if(selected)$('filmstrip').scrollTo({left:selected.offsetLeft-$('filmstrip').clientWidth/2+selected.offsetWidth/2,behavior:reduced?'instant':'smooth'});
+    const art=artwork(frame,true);
+    $('viewer-art').replaceChildren(placeholder(frame));
+    if(art.tagName==='IMG'&&art.decode){try{await art.decode();}catch{if(request===renderRequest)$('viewer-art').replaceChildren(placeholder(frame));restartTimer();return;}}
+    if(request!==renderRequest)return;
+    $('viewer-art').replaceChildren(art);restartTimer();
+  }
+  function open(index, trigger) {
+    if(!unlocked||!data.length)return;opener=trigger;viewer.showModal();show(index);$('viewer-close').focus();
+  }
+  $('viewer-close').addEventListener('click',()=>viewer.close());
+  viewer.addEventListener('close',()=>{++renderRequest;stop();opener?.focus({preventScroll:true});});
+  $('viewer-prev').addEventListener('click',()=>show(current-1));$('viewer-next').addEventListener('click',()=>show(current+1));
+  $('viewer-play').addEventListener('click',()=>{if(autoplay){stop();return;}autoplay=true;$('viewer-play').textContent='Ⅱ';$('viewer-play').setAttribute('aria-pressed','true');$('viewer-play').setAttribute('aria-label','Остановить слайд-шоу');restartTimer();});
+  viewer.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();show(current+(event.key==='ArrowLeft'?-1:1));}});
+  $('lightbox-stage').addEventListener('touchstart',event=>{if(event.touches.length===1)touchStart={x:event.touches[0].clientX,y:event.touches[0].clientY};else touchStart=null;},{passive:true});
+  $('lightbox-stage').addEventListener('touchend',event=>{if(!touchStart)return;const dx=event.changedTouches[0].clientX-touchStart.x,dy=event.changedTouches[0].clientY-touchStart.y;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)show(current+(dx<0?1:-1));touchStart=null;},{passive:true});
+  $('lightbox-stage').addEventListener('touchcancel',()=>touchStart=null,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else restartTimer();});
+  $('back-top').addEventListener('click',()=>window.scrollTo({top:0,behavior:reduced?'instant':'smooth'}));
+  addEventListener('pagehide',()=>clearTimeout(timer));
 })();
